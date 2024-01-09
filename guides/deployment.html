@@ -1,0 +1,429 @@
+
+  <!DOCTYPE html>
+<html lang="en" data-accent-color="sky" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Deploy your project - Falco</title>
+    <link rel="shortcut icon" href="../_static/falco-logo.svg"/><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Optimizing Database Access" href="optimizing_database_access.html" /><link rel="prev" title="Logging and monitoring" href="logging_and_monitoring.html" />
+      <link rel="canonical" href="https://falco.oluwatobi.dev/guides/deployment.html" />
+
+  <script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(sessionStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=aecf457f" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=5d7d6ab7" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=983ad87d" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/>
+<meta property="og:url" content="https://falco.oluwatobi.dev/guides/deployment.html"/>
+<meta property="og:title" content="Deploy your project"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="description" content="Smooth Deployment Strategies for django projects"/>
+<meta property="og:description" content="Smooth Deployment Strategies for django projects"/></head>
+<body><div class="document"><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand mr-4" href="../index.html">
+      <img class="light-logo" src="../_static/logo_with_text.svg" alt="Falco" height="28" />
+      <img class="dark-logo" src="../_static/logo_with_text.svg" alt="Falco" height="28" />
+      <strong>Falco</strong>
+    </a>
+    <div class="sy-head-links" id="NavLinks">
+      <nav class="sy-head-nav"></nav>
+      <div class="sy-head-extra flex items-center print:hidden">
+<form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form>
+        
+        
+        <div class="sy-head-social flex items-center">
+            <a class="flex items-center" href="https://github.com/tobi-de/falco" aria-label="GitHub">
+              <i class="i-icon github"></i>
+            </a>
+        </div>
+      </div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden">
+      <button class="js-theme theme-switch flex items-center"
+        data-aria-auto="Switch to light color mode"
+        data-aria-light="Switch to dark color mode"
+        data-aria-dark="Switch to auto color mode">
+        <i class="i-icon theme-icon"></i>
+      </button>
+      <button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="NavLinks" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6"><div class="sidebar-links">
+  <ul>
+    <li>
+      <a href="https://github.com/tobi-de/falco/discussions">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path fill="#0099CC" fill-rule="evenodd" clip-rule="evenodd" d="M11 5a6 6 0 0 0-4.687 9.746c.215.27.315.62.231.954l-.514 2.058a1 1 0 0 0 1.485 1.1l2.848-1.71c.174-.104.374-.15.576-.148H13a6 6 0 0 0 0-12h-2Z"/>
+            <circle fill="white" cx="12" cy="11" r="1"/>
+            <circle fill="white" cx="9" cy="11" r="1"/>
+            <circle fill="white" cx="15" cy="11" r="1"/>
+          </svg>
+        </span>
+        <span class="text">Discussion</span>
+      </a>
+    </li>
+  </ul>
+</div>
+        <div class="globaltoc" data-expand-depth="1"><p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="current">
+<li class="toctree-l1 _expand"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 _expand"><a class="reference internal" href="../the_cli/index.html">The CLI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../the_cli/start_project.html">Start project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../the_cli/crud.html">CRUD for your model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../the_cli/htmx.html">HTMX goodies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../the_cli/work.html">Running multiple process in parallel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../the_cli/migrations.html">Remove / Reset your migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../the_cli/sync_dotenv.html">Keep the .env and .env.template in sync</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../the_cli/make_superuser.html">Make a superuser from pre-configured settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="interactive_user_interfaces.html">Interactive user interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_queues_and_schedulers.html">Task Queues and Schedulers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="writing_documentation.html">Writing documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="writing_tests.html">Writing tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging_and_monitoring.html">Logging and monitoring</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Deploy your project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimizing_database_access.html">Optimizing Database Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="avoiding_god_models.html">Business logic in django</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dynamic_model_schema.html">Dynamic Model Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="realtime.html">Realtime in Django: Websockets, SSE, Polling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="permissions_and_authorization.html">Permissions and authorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_tips.html">Database Tips: Backup, Scaling, Triggers, and More</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multitenancy.html">Managing Multi-tenancy in Django</a></li>
+<li class="toctree-l2"><a class="reference internal" href="writing_async_code.html">Async Coding in Django</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_sqlite_in_production.html">Use Sqlite in production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running_project_in_a_container.html">Running your project in a single container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tips_and_extra.html">Tips and extra</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1 _expand"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1 _expand"><a class="reference internal" href="../codeofconduct.html">Code of Conduct</a></li>
+<li class="toctree-l1 _expand"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1 _expand"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-icon close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4">
+  <div class="localtoc">
+    <h3>On this page</h3>
+    <ul>
+<li><a class="reference internal" href="#static-files">Static Files</a></li>
+<li><a class="reference internal" href="#media-files">Media Files</a></li>
+<li><a class="reference internal" href="#database">Database</a></li>
+<li><a class="reference internal" href="#wsgi-server">WSGI server</a></li>
+<li><a class="reference internal" href="#web-server">Web server</a></li>
+<li><a class="reference internal" href="#resources">Resources</a></li>
+<li><a class="reference internal" href="#deployment-platforms">Deployment Platforms</a><ul>
+<li><a class="reference internal" href="#managed-solutions">Managed solutions</a></li>
+<li><a class="reference internal" href="#self-managed-solutions">Self-Managed solutions</a><ul>
+<li><a class="reference internal" href="#p-a-a-s-platform-as-a-service">P.A.A.S (Platform as a Service)</a></li>
+<li><a class="reference internal" href="#bare-bone-vps">Bare-bone VPS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div><a class="js-repo-stats repo-stats flex items-center" href="https://github.com/tobi-de/falco"
+  data-type="github" data-user="tobi-de" data-repo="falco">
+  <span class="w-8 flex items-center justify-around shrink-0 text-3xl">
+    <i class="i-icon github"></i>
+  </span>
+  <span class="flex-grow px-2">
+    <span>tobi-de/falco</span>
+    <span class="flex text-sm repo-stats-count">
+      <span class="flex items-center pr-3">
+        <i class="i-icon star"></i>
+        <strong class="js-repo-stars ml-1">0</strong>
+      </span>
+      <span class="flex items-center">
+        <i class="i-icon git-fork"></i>
+        <strong class="js-repo-forks ml-1">0</strong>
+      </span>
+    </span>
+  </span>
+</a><div class="edit-this-page">
+  <a href="https://github.com/tobi-de/falco/blob/master/docs/guides/deployment.rst">Edit this page</a>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div>
+    </div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+    <div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-icon menu"></i>
+      </button>
+    </div>
+    <ul class="flex-1">
+      
+      
+      <li><a href="../index.html">Falco</a><span>/</span></li>
+      
+      <li><a href="index.html">Guides</a><span>/</span></li>
+      
+      <li><strong>Deploy your project</strong></li>
+      
+      
+    </ul>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-icon outdent"></i>
+      </button>
+    </div>
+  </div>
+</div>
+    <div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="deploy-your-project">
+<h1>Deploy your project<a class="headerlink" href="#deploy-your-project" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=t-wsiW5mkgA">https://www.youtube.com/watch?v=t-wsiW5mkgA</a></p>
+<p>Intro</p>
+<section id="static-files">
+<h2>Static Files<a class="headerlink" href="#static-files" title="Link to this heading">¶</a></h2>
+</section>
+<section id="media-files">
+<h2>Media Files<a class="headerlink" href="#media-files" title="Link to this heading">¶</a></h2>
+<p>Media files in django usually refer to files uploaded by users, profile pictures, product images, etc.
+I usually manage my media files using <a class="reference external" href="https://github.com/jschneier/django-storages">django-storages</a>.
+Here is how I set it up.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span id="1-1"><span class="c1"># core/storages.py</span>
+</span><span id="1-2"><span class="kn">from</span> <span class="nn">storages.backends.s3boto3</span> <span class="kn">import</span> <span class="n">S3Boto3Storage</span>
+</span><span id="1-3">
+</span><span id="1-4"><span class="k">class</span> <span class="nc">MediaRootS3Boto3Storage</span><span class="p">(</span><span class="n">S3Boto3Storage</span><span class="p">):</span>
+</span><span id="1-5">    <span class="n">location</span> <span class="o">=</span> <span class="s2">&quot;media&quot;</span>
+</span><span id="1-6">    <span class="n">file_overwrite</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="1-7">
+</span><span id="1-8">
+</span><span id="1-9"><span class="c1"># settings.py - production settings</span>
+</span><span id="1-10"><span class="n">AWS_ACCESS_KEY_ID</span> <span class="o">=</span> <span class="n">env</span><span class="p">(</span><span class="s2">&quot;DJANGO_AWS_ACCESS_KEY_ID&quot;</span><span class="p">)</span>
+</span><span id="1-11"><span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="n">env</span><span class="p">(</span><span class="s2">&quot;DJANGO_AWS_SECRET_ACCESS_KEY&quot;</span><span class="p">)</span>
+</span><span id="1-12"><span class="n">AWS_STORAGE_BUCKET_NAME</span> <span class="o">=</span> <span class="n">env</span><span class="p">(</span><span class="s2">&quot;DJANGO_AWS_STORAGE_BUCKET_NAME&quot;</span><span class="p">)</span>
+</span><span id="1-13"><span class="n">DEFAULT_FILE_STORAGE</span> <span class="o">=</span> <span class="s2">&quot;project_name.core.storages.MediaRootS3Boto3Storage&quot;</span>
+</span><span id="1-14"><span class="n">MEDIA_URL</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">AWS_STORAGE_BUCKET_NAME</span><span class="si">}</span><span class="s2">.s3.amazonaws.com/media/&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="database">
+<h2>Database<a class="headerlink" href="#database" title="Link to this heading">¶</a></h2>
+</section>
+<section id="wsgi-server">
+<h2>WSGI server<a class="headerlink" href="#wsgi-server" title="Link to this heading">¶</a></h2>
+<p><strong>Process Managers</strong></p>
+<p><strong>Restart without downtime</strong>
+sudo supervisorctl pid gunicorn | sudo xargs kill -s HUP
+<a class="reference external" href="https://blog.pecar.me/gunicorn-restart">https://blog.pecar.me/gunicorn-restart</a></p>
+</section>
+<section id="web-server">
+<h2>Web server<a class="headerlink" href="#web-server" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.nginx.com/">https://www.nginx.com/</a>
+<a class="reference external" href="https://www.nginx.com/products/nginx-unit/">https://www.nginx.com/products/nginx-unit/</a>
+<a class="reference external" href="https://httpd.apache.org/">https://httpd.apache.org/</a>
+<a class="reference external" href="https://caddyserver.com/">https://caddyserver.com/</a></p>
+<p><strong>A small note on reverse proxies</strong></p>
+<p><a class="reference external" href="https://traefik.io/traefik/">https://traefik.io/traefik/</a></p>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">¶</a></h2>
+<p>Django Deployment Checklist
+<a class="reference external" href="https://youtu.be/t-wsiW5mkgA?si=WsXQIuO4kDwGKrVO">https://youtu.be/t-wsiW5mkgA?si=WsXQIuO4kDwGKrVO</a>
+<a class="reference external" href="https://github.com/ehmatthes/django-simple-deploy">https://github.com/ehmatthes/django-simple-deploy</a>
+<a class="reference external" href="https://github.com/lincolnloop/django-production">https://github.com/lincolnloop/django-production</a></p>
+</section>
+<section id="deployment-platforms">
+<h2>Deployment Platforms<a class="headerlink" href="#deployment-platforms" title="Link to this heading">¶</a></h2>
+<p>Deployment is not a solved solution for me, it is still a pain, no matter how many time I do it, it never goes smoothly. If you can afford it I’ll recommend
+a managed solution (the cloud), if for any reason you decide to go the self-hosting route, I’ll recommend you use a P.A.A.S (Platform as a Service) solution
+to ease your burden or a least docker as a bare minimum.</p>
+<p>Paas and rent a VPS</p>
+<section id="managed-solutions">
+<h3>Managed solutions<a class="headerlink" href="#managed-solutions" title="Link to this heading">¶</a></h3>
+<p>I don’t have much experience with these, but are relatively similarly price and quite easy to use, so you can just use one.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://fly.io/">Fly</a></p></li>
+<li><p><a class="reference external" href="https://render.com/">Render</a></p></li>
+<li><p><a class="reference external" href="https://aws.amazon.com/elasticbeanstalk/">AWS Elastic Beanstalk</a></p></li>
+<li><p><a class="reference external" href="https://www.heroku.com/">Heroku</a></p></li>
+<li><p><a class="reference external" href="https://railway.app/">Railway</a></p></li>
+<li><p><a class="reference external" href="https://appliku.com">Appliku</a></p></li>
+</ul>
+</section>
+<section id="self-managed-solutions">
+<h3>Self-Managed solutions<a class="headerlink" href="#self-managed-solutions" title="Link to this heading">¶</a></h3>
+<p>If you are new to it, the term <strong>self-hosting</strong> might be misguidind, usually people use self-hosting to just mean you rent a vps and to the work yourself
+instead of paying someone else to do it for you. It might be cheaper but if you want to do real <strong>self-hosting</strong> you technically need to by you own hardware.
+But I digress, the point of this section is to present you tools that will easier your burden if you decide de rent a server instead of using a managed solution.
+I find that self-hosted solutions are generally cheaper than managed/hosted solutions, but I don’t have much experience with managed solutions,
+so I could be wrong, do your own research and if you can afford it, try them out to see what works best for you.</p>
+<section id="p-a-a-s-platform-as-a-service">
+<h4>P.A.A.S (Platform as a Service)<a class="headerlink" href="#p-a-a-s-platform-as-a-service" title="Link to this heading">¶</a></h4>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>My personal favorite is <a class="reference external" href="https://caprover.com/">caprover</a></p>
+</div>
+<p><strong>CapRover</strong></p>
+<blockquote>
+<div><p>“CapRover is an extremely easy to use app/database deployment &amp; web server manager for your NodeJS, Python, PHP, ASP.NET, Ruby, MySQL, MongoDB, Postgres, WordPress (and etc…) applications!”</p>
+<p class="attribution">—<a class="reference external" href="https://caprover.com/">CapRover Official Site</a></p>
+</div></blockquote>
+<p>CapRover is a self-hosted <a class="reference external" href="https://en.wikipedia.org/wiki/Platform_as_a_service">PaaS</a> solution, think <a class="reference external" href="https://www.heroku.com/">heroku</a> but on your own servers.
+Nowadays, I tend to prefer PaaS solutions over manual deployment and configuration, as they are easy to use with little configuration to deploy most apps.
+Software is usually quite a pain to deploy and even though I’ve gotten better at it over time, I’ll always choose a managed solution over manual deployment.</p>
+<p>After installing CaProver with the <a class="reference external" href="https://caprover.com/docs/get-started.html">getting started guide</a>, there is not much left to do, create a new application and in the section <code class="docutils literal notranslate"><span class="pre">deployment</span></code>.
+configure your application using the third method <code class="docutils literal notranslate"><span class="pre">Method</span> <span class="pre">3:</span> <span class="pre">Deploy</span> <span class="pre">from</span> <span class="pre">Github/Bitbucket/Gitlab</span></code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you use github, instead of entering your password directly into the <code class="docutils literal notranslate"><span class="pre">password</span></code> field, you can use a <a class="reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token">personal access token</a>,
+which is a more secure option.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Checkout <a class="reference external" href="https://caprover.com/docs/deployment-methods.html#automatic-deploy-using-github-bitbucket-and-etc">caprover automatic deploy</a> to automate the deployment of your applications.</p>
+</div>
+<p>If you have generate a template with the <code class="docutils literal notranslate"><span class="pre">falco</span></code> cli or you have a dockerfile at your disposal, the only config you need in your projec to run caprover is this</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">captain-definition</span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span id="1-1">{
+</span><span id="1-2">   &quot;schemaVersion&quot;: 2,
+</span><span id="1-3">   &quot;dockerfilePath&quot;: &quot;./docker/Dockerfile&quot; # the path to your dockerfile
+</span><span id="1-4">}
+</span></pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p><a class="reference external" href="https://dokku.com/">Dokku</a></p></li>
+<li><p><a class="reference external" href="https://github.com/coollabsio/coolify">Coolify</a></p></li>
+<li><p><a class="reference external" href="https://www.digitalocean.com/products/app-platform">DigitalOcean App Platform</a></p></li>
+</ul>
+</section>
+<section id="bare-bone-vps">
+<h4>Bare-bone VPS<a class="headerlink" href="#bare-bone-vps" title="Link to this heading">¶</a></h4>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>My personal pick is Linode</p>
+</div>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.linode.com/">Linode</a></p></li>
+<li><p><a class="reference external" href="https://www.digitalocean.com/">DigitalOcean</a></p></li>
+<li><p><a class="reference external" href="https://www.vultr.com/">Vultr</a></p></li>
+<li><p><a class="reference external" href="https://www.pythonanywhere.com/">PythonAnywhere</a></p></li>
+</ul>
+<p>I recently discovered <a class="reference external" href="https://github.com/ehmatthes/django-simple-deploy">django-simple-deploy</a> which can configure your django project.</p>
+</section>
+</section>
+</section>
+</section>
+
+        </article>
+        
+        <div class="navigation flex print:hidden">
+  <div class="navigation-prev">
+    <a href="logging_and_monitoring.html">
+      <i class="i-icon chevron"></i>
+      <div class="page-info">
+        <span>Previous</span>
+        
+        <div class="title">Logging and monitoring</div>
+        
+      </div>
+    </a>
+  </div>
+  <div class="navigation-next">
+    <a href="optimizing_database_access.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Optimizing Database Access</div>
+      </div>
+      <i class="i-icon chevron"></i>
+    </a>
+  </div>
+</div>
+        
+      </div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>Copyright &copy; 2023, Tobi DEGNON</p>
+        
+        <p>
+          Made with
+          
+          <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+          
+          <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+        </p>
+      </div>
+      <div class="sy-foot-socials">
+          <a href="https://github.com/tobi-de/falco" aria-label="GitHub"><i class="i-icon github"></i></a>
+          <a href="https://twitter.com/tobidegnon" aria-label="X (Twitter)"><i class="i-icon x-twitter"></i></a>
+          <a href="https://fosstodon.org/@tobide" aria-label="Mastodon"><i class="i-icon mastodon"></i></a>
+      </div>
+    </div>
+  </div>
+</footer></div>
+      <script src="../_static/documentation_options.js?v=000c92bf"></script>
+      <script src="../_static/doctools.js?v=888ff710"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script src="../_static/design-tabs.js?v=36754332"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script src="../_static/shibuya.js?v=ccb09f80"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    
+</body>
+</html>
